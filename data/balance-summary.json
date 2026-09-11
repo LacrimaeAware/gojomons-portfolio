@@ -1,0 +1,230 @@
+{
+  "title": "How much does a stat adjustment change matchup balance?",
+  "date": "2026-09-11",
+  "roster_seed": 741911.0,
+  "existing_single_type_compensation": 1.07,
+  "single_count": 41.0,
+  "dual_count": 61.0,
+  "level": 30.0,
+  "selected_scale": 1.0,
+  "training": [
+    {
+      "scale": 0.8,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.248046875,
+      "bootstrap95": [
+        0.203125,
+        0.294921875
+      ],
+      "hoeffding95": [
+        0.16316553026621128,
+        0.3329282197337887
+      ],
+      "single_on_player_side": 0.232421875,
+      "single_on_enemy_side": 0.263671875,
+      "timeouts": 0.0,
+      "draws": 6.0,
+      "mean_turns": 4.392578125
+    },
+    {
+      "scale": 0.9,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.359375,
+      "bootstrap95": [
+        0.30859375,
+        0.41015625
+      ],
+      "hoeffding95": [
+        0.2744936552662113,
+        0.4442563447337887
+      ],
+      "single_on_player_side": 0.349609375,
+      "single_on_enemy_side": 0.369140625,
+      "timeouts": 0.0,
+      "draws": 6.0,
+      "mean_turns": 4.875
+    },
+    {
+      "scale": 1.0,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.4638671875,
+      "bootstrap95": [
+        0.4111328125,
+        0.515625
+      ],
+      "hoeffding95": [
+        0.3789858427662113,
+        0.5487485322337887
+      ],
+      "single_on_player_side": 0.451171875,
+      "single_on_enemy_side": 0.4765625,
+      "timeouts": 0.0,
+      "draws": 7.0,
+      "mean_turns": 5.375
+    },
+    {
+      "scale": 1.1,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.6005859375,
+      "bootstrap95": [
+        0.5439453125,
+        0.6513671875
+      ],
+      "hoeffding95": [
+        0.5157045927662113,
+        0.6854672822337887
+      ],
+      "single_on_player_side": 0.5859375,
+      "single_on_enemy_side": 0.615234375,
+      "timeouts": 0.0,
+      "draws": 9.0,
+      "mean_turns": 5.74609375
+    },
+    {
+      "scale": 1.2,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.6904296875,
+      "bootstrap95": [
+        0.6376953125,
+        0.7392578125
+      ],
+      "hoeffding95": [
+        0.6055483427662113,
+        0.7753110322337887
+      ],
+      "single_on_player_side": 0.693359375,
+      "single_on_enemy_side": 0.6875,
+      "timeouts": 0.0,
+      "draws": 13.0,
+      "mean_turns": 5.810546875
+    },
+    {
+      "scale": 1.3,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.728515625,
+      "bootstrap95": [
+        0.6787109375,
+        0.775390625
+      ],
+      "hoeffding95": [
+        0.6436342802662113,
+        0.8133969697337887
+      ],
+      "single_on_player_side": 0.75390625,
+      "single_on_enemy_side": 0.703125,
+      "timeouts": 0.0,
+      "draws": 16.0,
+      "mean_turns": 5.890625
+    },
+    {
+      "scale": 1.4,
+      "scenarios": 256,
+      "battles": 512,
+      "mean": 0.7861328125,
+      "bootstrap95": [
+        0.7392578125,
+        0.830078125
+      ],
+      "hoeffding95": [
+        0.7012514677662113,
+        0.8710141572337887
+      ],
+      "single_on_player_side": 0.802734375,
+      "single_on_enemy_side": 0.76953125,
+      "timeouts": 0.0,
+      "draws": 13.0,
+      "mean_turns": 5.865234375
+    }
+  ],
+  "holdout": [
+    {
+      "scale": 1.0,
+      "scenarios": 1024,
+      "battles": 2048,
+      "mean": 0.4970703125,
+      "bootstrap95": [
+        0.471923828125,
+        0.5234375
+      ],
+      "hoeffding95": [
+        0.45462964013310564,
+        0.5395109848668944
+      ],
+      "single_on_player_side": 0.4990234375,
+      "single_on_enemy_side": 0.4951171875,
+      "timeouts": 0.0,
+      "draws": 34.0,
+      "mean_turns": 5.3017578125
+    }
+  ],
+  "holdout_trace": [
+    {
+      "n": 16,
+      "mean": 0.5625,
+      "hoeffding95": [
+        0.2229746210648451,
+        0.9020253789351549
+      ]
+    },
+    {
+      "n": 32,
+      "mean": 0.4765625,
+      "hoeffding95": [
+        0.23648180217001982,
+        0.7166431978299802
+      ]
+    },
+    {
+      "n": 64,
+      "mean": 0.55078125,
+      "hoeffding95": [
+        0.38101856053242256,
+        0.7205439394675774
+      ]
+    },
+    {
+      "n": 128,
+      "mean": 0.529296875,
+      "hoeffding95": [
+        0.4092565260850099,
+        0.64933722391499
+      ]
+    },
+    {
+      "n": 256,
+      "mean": 0.515625,
+      "hoeffding95": [
+        0.4307436552662113,
+        0.6005063447337887
+      ]
+    },
+    {
+      "n": 512,
+      "mean": 0.53515625,
+      "hoeffding95": [
+        0.475136075542505,
+        0.5951764244574951
+      ]
+    },
+    {
+      "n": 1024,
+      "mean": 0.4970703125,
+      "hoeffding95": [
+        0.45462964013310564,
+        0.5395109848668944
+      ]
+    }
+  ],
+  "total_battles": 5632,
+  "selection_rule": "Minimize |mean single-type battle score - 0.5| on training scenarios; ties take the first ascending grid value.",
+  "score_definition": "Win 1, loss 0, draw or turn-limit timeout 0.5; average both side orientations for each scenario.",
+  "confidence": "Bootstrap intervals resample whole scenarios, not individual battles. Hoeffding intervals use scores bounded in [0,1]. Both quantify random matchup/seed sampling within this fixed roster, not generalization to player campaigns.",
+  "takeaway": "Training selected a 1.00\u00d7 multiplier. The independent holdout score was 49.7%.",
+  "scope": "One versus one, level 30, no equipment or master. Family and subtype effects enabled. Both side orientations. One seeded style realization per species; multipliers are relative to current stats, including existing single-type compensation."
+}
