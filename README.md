@@ -4,7 +4,7 @@ Gojomons is a creature-building roguelike autobattler I am developing in Godot. 
 
 ## Start with the game
 
-[![Scarmonk and Catra battle Dragonel and Gearghoul](media/battle-poster.webp)](https://lacrimaeaware.github.io/gojomons-portfolio/)
+[![Animated Gojomons main menu](media/main-menu-preview.webp)](https://lacrimaeaware.github.io/gojomons-portfolio/)
 
 ### **[Open the visual showcase →](https://lacrimaeaware.github.io/gojomons-portfolio/)**
 
