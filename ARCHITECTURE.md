@@ -6,23 +6,30 @@ A hit can activate an item, a creature ability, an animation and a combat-log en
 
 ## Separate resolving an action from reacting to it
 
+**Resolve the action once**
+
 ```mermaid
 flowchart TB
-  L[Live battle] --> R[CombatResolver]
-  S[Headless simulation] --> R
-  R --> B[Updated battle state and result]
-  B --> V[Live presentation]
-  B --> T[Simulation results]
-  R -. Effect notifications .-> E[EventDispatcher]
-  E --> U[UI and audio listeners]
-  E --> D[Diagnostic listeners]
+  A[Live battle or headless simulation] --> R[CombatResolver]
+  R --> B[Updated state and action result]
+  B --> C[Present the result or record the outcome]
   classDef rules fill:#173f4b,color:#fff,stroke:#173f4b
-  classDef observers fill:#f0e3c8,color:#29251c,stroke:#8a7445
+  classDef output fill:#f0e3c8,color:#29251c,stroke:#8a7445
   class R,B rules
-  class E,U,D,V,T observers
+  class A,C output
 ```
 
-**Teal: rules and state. Gold: presentation and observation.** Both live play and simulation call the resolver; the presentation consumes its result.
+**Let other systems react**
+
+```mermaid
+flowchart TB
+  A[Effect notification] --> E[EventDispatcher]
+  E --> O[UI, audio and diagnostic listeners]
+  classDef observe fill:#f0e3c8,color:#29251c,stroke:#8a7445
+  class A,E,O observe
+```
+
+Teal identifies combat rules and state. Gold identifies callers, presentation and observation. Both live play and simulation use the same resolver.
 
 ## Why I introduced signals
 
