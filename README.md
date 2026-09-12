@@ -1,50 +1,48 @@
-# Gojomons
+[![Gojomons — current main menu, recorded in Godot](media/main-menu-preview.webp?v=20260911-current)](https://lacrimaeaware.github.io/gojomons-portfolio/)
 
 Gojomons is a creature-building roguelike autobattler I am developing in Godot. Build a team, choose a route, combine moves with equipment, and find out whether the plan survives the next fight.
 
-## Start with the game
+## Explore the visual showcase
 
-[![Animated Gojomons main menu](media/main-menu-preview.webp)](https://lacrimaeaware.github.io/gojomons-portfolio/)
+[![Open the Gojomons showcase: an illustrated book of the world, creatures, combat and development tools](media/showcase-home.webp)](https://lacrimaeaware.github.io/gojomons-portfolio/)
 
-### **[Open the visual showcase →](https://lacrimaeaware.github.io/gojomons-portfolio/)**
+**[Open the book →](https://lacrimaeaware.github.io/gojomons-portfolio/)** Game footage introduces the world and combat. The Balance and Tools chapters show how I test mechanics, inspect simulations and review changes in playable scenes.
 
-The interactive showcase introduces the world, creatures and combat through game footage, then opens the development side: simulation-based balance work, repeatable playtests and the tools used to inspect results.
+## Managing complexity and its consequences
 
-For a closer technical look:
+Moves, creature abilities, held items and team relics can all react during the same fight. Those interactions make builds interesting, but they also make bugs and dominant strategies harder to spot. I use shared combat rules, automated opponents and repeatable playtests to examine what happens when the systems meet.
 
-- **[Architecture](ARCHITECTURE.md)** explains why the project uses a central event vocabulary alongside one shared combat resolver.
-- **[Balance study](METHODS.md)** records the experimental design, controls and reproducible analysis behind one roster decision.
-- **[Provenance](PROVENANCE.md)** identifies what the public data and media represent.
-
-Runs move through towns, routes, dungeons and bosses. Creature families, moves, held items and team relics create builds that can behave very differently even when their basic stats look similar.
-
-## Design idea → system problem
-
-| I wanted… | That required… |
+| Development question | How I investigate it |
 | --- | --- |
-| Mechanics that combine in surprising ways | A shared event vocabulary, with one authoritative resolver for ordered combat changes |
-| A large roster that remains understandable | A searchable Living Game Bible built from the game data: creatures, moves, items, relics, masters and balance records |
-| Faster iteration without guessing | Encounter fixtures, contextual review tools and seeded simulations using the same rules as live combat |
+| How can effects interact without firing twice or in the wrong order? | One combat resolver owns the state changes; signals let presentation and diagnostic systems respond. **[Architecture →](ARCHITECTURE.md)** |
+| Which choices reward a stronger strategy, and which are broadly overpowered? | Compare simulated outcomes under different decision policies, then inspect species and matchup patterns. **[Balance showcase →](https://lacrimaeaware.github.io/gojomons-portfolio/balance/)** |
+| How can I check a change quickly in its actual context? | Launch specific encounters, inspect the scene and attach review notes. **[Development tools →](https://lacrimaeaware.github.io/gojomons-portfolio/tools/)** |
 
-The architecture changed as the game grew. Signals reduced dependencies between campaign, interface and diagnostic systems. State-changing combat later moved into one direct `CombatResolver`, preventing effects from firing twice and keeping live battles aligned with headless simulation. [The architecture note](ARCHITECTURE.md) explains that boundary.
+### From balance question to a tested decision
 
-![Catra's Compendium entry and move list in the Living Game Bible](media/compendium.webp)
+Balance should leave players with worthwhile alternatives. One example is the tradeoff between single-type and dual-type creatures: a second type adds matchup options and weaknesses, so equal base stats need not produce equally useful choices.
 
-The Living Game Bible turns the project’s content into a browsable reference instead of a collection of disconnected data files. It is designed to be rebuilt as the game changes, so the same structure supports design review, balance work and the player-facing Compendium.
+Gojomons already gives single-type creatures a **7% stat allowance**. I tested whether that allowance needed changing: seven adjustments, the same training matchups, then a separate set of fresh matchups to check the selected setting.
 
-## Keeping simple and flexible creatures viable
+| Experiment | Result |
+| --- | --- |
+| Roster | 41 single-type and 61 dual-type species |
+| Selected adjustment | **Keep current stats** (1.00×, retaining the existing allowance) |
+| Fresh-matchup score | **49.7%** for single-type creatures |
+| 95% paired-bootstrap interval | **47.2–52.3%**, from 1,024 paired scenarios / 2,048 battles |
 
-Dual-type creatures can exploit more matchups and mechanic combinations. If that flexibility wins too consistently, single-type creatures become poor team-building choices and much of the roster stops mattering. Gojomons gives single-type creatures a 7% stat allowance to compensate. The practical question is whether that allowance keeps both groups viable without making either one dominant.
+The group average supports keeping the allowance in this test. Species-level matchups and equipment synergies are further questions—the [interactive balance chapter](https://lacrimaeaware.github.io/gojomons-portfolio/balance/) shows how I examine them.
 
-I tested seven possible adjustments across 41 single-type and 61 dual-type species using the shared battle simulator.
+**[Read the experiment →](METHODS.md)** for the controls, selection procedure and uncertainty. **[Source and media notes →](PROVENANCE.md)** identify the recorded data and footage.
 
-Training selected **1.00×**, keeping the current stats. On 1,024 fresh matchup-and-seed pairs—2,048 battles after exchanging sides—single-type creatures scored **49.7%**, with a **47.2–52.3%** paired-bootstrap interval. For this roster and ruleset, the current group-level allowance is already close to parity.
-
-[Methods, controls and interpretation](METHODS.md) · [Recorded results](data/balance-summary.json)
+<details>
+<summary>Reproduce the recorded analysis</summary>
 
 ```sh
 python experiments/analyze_balance.py
 python -m unittest discover -s tests
 ```
 
-The included data reproduces the reported selection, totals and interval. New battles require the private game source. Gojomons remains in active development; this repository is a selected technical record rather than a playable release.
+The included outcomes reproduce the selection, totals and interval. Running new battles requires the private game source.
+
+</details>

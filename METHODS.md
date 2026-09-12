@@ -1,27 +1,86 @@
-# Testing a proposed stat adjustment
+[← Project](README.md) · [Interactive balance showcase](https://lacrimaeaware.github.io/gojomons-portfolio/balance/)
 
-The question is whether scaling single-type creatures' combat stats brings their average score against dual-type creatures closer to 50%. The intervention changes stats; it does not isolate the causal effect of having a second type.
+# Testing whether a roster adjustment is needed
 
-## Matchups
+Creature types change which matchups and combinations are useful. Gojomons gives single-type creatures a 7% stat allowance to keep them competitive with dual-type creatures. This experiment asks whether changing that allowance improves average matchup balance.
 
-The pool contains every species in the snapshot with one or two types, no legendary tag, and no further evolution condition: 41 single-type and 61 dual-type species. Each is constructed at level 30 with the game's level-dependent moves. Species can roll different combat styles; roster seed 741911 fixes one style realization per species, and the exported roster records it. Family abilities and subtype effects remain active. There are no held items, relics, master bonuses, or weather effects.
+## Decision and evidence
 
-For each scenario, sample one member of each group uniformly with replacement and a battle seed. Fight twice, exchanging the sides. A scenario's score is the mean of the single-type creature's two results: win 1, loss 0, draw or 80-turn timeout 0.5. The source data records both outcomes and turn counts, so timeouts cannot disappear into a win-rate denominator.
+| Decision | Fresh-matchup result | Uncertainty |
+| --- | --- | --- |
+| **Retain current stats** | **49.7%** single-type battle score | **47.2–52.3%** paired-bootstrap 95% interval |
 
-The multiplier applies to HP, maximum HP, attack, defense, special attack, special defense, and speed, rounding each to the nearest integer. Types, moves, opponents, styles, and equipment stay fixed. These are effective combat-stat changes, not additions to the species' base-stat total. The existing constructor already applies a 1.07 multiplier to this single-type cohort. An experimental value of 1.00 preserves that allowance; it does not remove it.
+Training selected 1.00×: the existing allowance remains in place. Validation used 1,024 fresh scenarios, each fought on both sides. The result supports group-level parity for this roster and ruleset; equipment and campaign builds require their own tests.
 
-## Selection and validation
+## Select first, validate afterward
 
-The prespecified grid is 0.80, 0.90, 1.00, 1.10, 1.20, 1.30, and 1.40. Each value uses the same 256 training scenarios. Choose the multiplier whose mean score is closest to 0.5; ascending grid order breaks ties. Then evaluate that choice and the baseline on 1,024 new scenarios. Training selected the baseline, so the holdout contains a single condition.
+```mermaid
+flowchart TB
+  A[Fixed roster: 41 single-type / 61 dual-type] --> B[256 training scenarios]
+  B --> C[Test seven stat multipliers on the same scenarios]
+  C --> D[Select score closest to 50%]
+  D --> E[1,024 fresh validation scenarios]
+  E --> F[Resample whole scenario pairs for uncertainty]
+  classDef select fill:#173f4b,color:#fff,stroke:#173f4b
+  classDef validate fill:#f0e3c8,color:#29251c,stroke:#8a7445
+  class A,B,C,D select
+  class E,F validate
+```
 
-Matching seeds couples the comparisons, but a changed action can consume a different sequence of random draws. The two trajectories need not experience identical hit/miss events. Exchanging sides controls average placement in this experiment; it does not assume that placement has no effect.
+**Teal: choose the setting. Gold: evaluate it on fresh scenarios.** Each scenario exchanges the two sides, so placement is balanced within the pair.
 
-Training includes 3,584 battles and the holdout 2,048, for **5,632 recorded battles**. A separate 32-battle repeated-seed check passed. The first eight training scenarios under each of seven multipliers were also replayed in reverse parameter order, both after the complete experiment and in a fresh engine process: all outcomes and turn counts matched. Checks at 0.80 and 1.40 confirmed that scaling survives combat initialization. The harness checks for input mutation and refuses to run if the combat-effects pipeline is unavailable. An additional existing multi-target regression check passed on 600 seeds, including 98 primary misses. These checks cover specific behavior, not every possible difference between simulation and live play.
+## What changes, and what stays fixed
 
-## Uncertainty and interpretation
+| Component | Setting |
+| --- | --- |
+| Eligible roster | Final-stage, nonlegendary species with one or two types |
+| Level and styles | Level 30; one style realization per species, roster seed 741911 |
+| Active mechanics | Level-dependent moves, family abilities and subtype effects |
+| Equipment and environment | No held items, relics, master bonuses or weather |
+| Intervention | Multiply single-type HP, attack, defenses and speed; round to nearest integer |
+| Candidate multipliers | 0.80, 0.90, 1.00, 1.10, 1.20, 1.30, 1.40, relative to current stats |
+| Battle score | Win = 1; loss = 0; draw or 80-turn timeout = ½ |
+| Scenario score | Mean of its two side-swapped battle scores |
 
-The displayed bootstrap interval resamples whole scenarios 4,000 times with a fixed analysis seed. The two side orientations stay together. This avoids treating matched outcomes as independent. It is an approximate, pointwise 95% interval.
+One species from each group is sampled uniformly with replacement, together with a battle seed. All settings use the same training scenarios. The setting closest to 50% wins; ascending grid order breaks ties. Since the baseline won selection, the holdout contains one condition.
 
-The summary also includes a conservative Hoeffding interval, using the scenario score's range [0,1]. For the holdout, it is **45.5–54.0%**. These intervals concern random matchup and battle-seed sampling within this fixed roster and ruleset. They do not measure uncertainty about other style realizations, campaign balance, future content, or human play. Intervals at successive sample counts in the convergence display are pointwise, not a simultaneous confidence sequence or stopping rule.
+## Why the pairing matters
 
-The independent holdout score is **49.7%**, with 34 draws and zero timeouts across 2,048 battles. Average battle length is **5.30 turns**. The sampled group average is close to parity under these conditions. Individual matchups can still be strongly unequal; group parity is only one design target.
+The two orientations share a matchup and seed, so they are related observations. The bootstrap resamples **whole scenarios**, keeping each pair together, rather than counting 2,048 battles as independent. It uses 4,000 resamples and a fixed analysis seed.
+
+| Validation measure | Recorded value |
+| --- | --- |
+| Battles | 2,048 |
+| Draws / timeouts | 34 / 0 |
+| Mean battle length | 5.30 turns |
+| Conservative Hoeffding 95% interval | 45.5–54.0% |
+
+Both intervals describe matchup-and-seed sampling within this fixed roster. Individual species, alternate combat styles and player strategies can produce different patterns. The intervention measures the effect of scaling stats, rather than isolating the effect of a second type.
+
+<details>
+<summary>Reproducibility checks and statistical details</summary>
+
+Training contains 3,584 battles; validation adds 2,048, for 5,632 recorded battles.
+
+| Check | Recorded outcome |
+| --- | --- |
+| Repeat fixed seeds | 32 battles reproduced |
+| Reverse parameter order | First eight scenarios at each setting matched outcomes and turn counts, including a fresh engine process |
+| Stat scaling survives initialization | Checked at 0.80× and 1.40× |
+| Input mutation / effects pipeline | Harness checks input mutation and requires effects to be enabled |
+| Multi-target regression | 600 seeds passed, including 98 primary misses |
+
+Shared seeds couple comparisons, but changed actions can consume random draws differently. The trajectories need not share identical hit/miss events. Bootstrap intervals are approximate and pointwise. The convergence display also uses pointwise intervals, not a sequential stopping rule.
+
+The stat multiplier includes current and maximum HP, Attack, Defense, Special Attack, Special Defense and Speed. It acts on effective combat stats after the existing 1.07 allowance.
+
+</details>
+
+## Reproduce the analysis
+
+```sh
+python experiments/analyze_balance.py
+python -m unittest discover -s tests
+```
+
+[Individual outcomes](data/battle-outcomes.json) feed the [analysis script](experiments/analyze_balance.py), which regenerates the [summary](data/balance-summary.json). The private game source is needed to run new battles. [Provenance](PROVENANCE.md) records the engine and source snapshot.

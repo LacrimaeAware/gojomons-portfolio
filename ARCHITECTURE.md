@@ -1,14 +1,49 @@
-# Signals, resolution and one combat path
+[← Project](README.md) · [See the development tools](https://lacrimaeaware.github.io/gojomons-portfolio/tools/)
 
-## The problem
+# Many reactions. One combat result.
 
-Gojomons has many systems that care about the same moment. Damage can trigger an item, a relic, a family ability, an animation, a sound, a combat log entry and a later campaign consequence. Connecting each producer directly to every consumer made new mechanics depend on unrelated files and made their lifetimes difficult to track.
+A hit can activate an item, a creature ability, an animation and a combat-log entry. As Gojomons grew, wiring each system directly to every other system made changes harder to follow. Automated balance testing raised a second requirement: a simulated battle must execute the same rules as a visible battle.
 
-Automatic balance testing created a second constraint. A headless simulator is useful only when it plays by the same rules as the live battle. Maintaining separate resolution paths invited quiet differences in effect order, status handling or random-number consumption.
+## Separate resolving an action from reacting to it
 
-## The first boundary: a shared event vocabulary
+```mermaid
+flowchart TB
+  L[Live battle] --> R[CombatResolver]
+  S[Headless simulation] --> R
+  R --> B[Updated battle state and result]
+  B --> V[Live presentation]
+  B --> T[Simulation results]
+  R -. Effect notifications .-> E[EventDispatcher]
+  E --> U[UI and audio listeners]
+  E --> D[Diagnostic listeners]
+  classDef rules fill:#173f4b,color:#fff,stroke:#173f4b
+  classDef observers fill:#f0e3c8,color:#29251c,stroke:#8a7445
+  class R,B rules
+  class E,U,D,V,T observers
+```
 
-I introduced a central `EventDispatcher` and named `GameEvents`. Systems can announce facts such as a battle starting, damage being calculated, an item triggering, time advancing or a dungeon reward resolving without importing every observer.
+**Teal: rules and state. Gold: presentation and observation.** Both live play and simulation call the resolver; the presentation consumes its result.
+
+## Why I introduced signals
+
+A central `EventDispatcher` and named `GameEvents` give systems a shared vocabulary. A producer announces an event; the UI, audio or diagnostics can respond without being imported into the producer. Campaign systems use the same approach for travel, shops and dungeon outcomes.
+
+## Why signals were only part of the solution
+
+Combat effects also need a definite execution order. Mixing event-driven mutation with direct simulator calls could apply an effect twice, or let the two paths diverge. I consolidated damage, statuses, bonus hits and queued healing in the shared `CombatResolver`. The live turn manager presents the result; the simulator records it without loading a visual scene.
+
+| Responsibility | Owner | Reason |
+| --- | --- | --- |
+| Apply ordered combat changes | `CombatResolver` | One place determines the outcome |
+| Announce effects and lifecycle events | `EventDispatcher` / `GameEvents` | Observers can evolve independently |
+| Animate and play sound | Live presentation | Timing does not require a second resolution |
+| Run repeated battles | `BattleSimulator` | Balance experiments exercise the shared rules |
+| Attach and remove listeners | The owning scene or system | Temporary reactions end with their context |
+
+<details>
+<summary>Dispatcher implementation and lifecycle rules</summary>
+
+The dispatcher rejects duplicate registration, removes empty event lists and copies the listener list before dispatch. A listener can therefore register or unregister during an event without changing the current iteration.
 
 ```gdscript
 func emit(event_name: String, context: Dictionary) -> void:
@@ -20,48 +55,8 @@ func emit(event_name: String, context: Dictionary) -> void:
             handler.call(context)
 ```
 
-The dispatcher is intentionally small. It rejects duplicate registration, removes empty event lists and copies the listener list before dispatch so a listener can register or unregister safely during an event.
+Authoritative combat mutation stays in the resolver. Live presentation consumes its output once. Scene listeners and temporary effects have explicit cleanup boundaries, and dispatch responds to events rather than per-frame polling.
 
-Signals work well for observers and boundaries:
+</details>
 
-- the interface can react to an item, relic or master effect;
-- campaign systems can observe travel, time, shops and dungeon outcomes;
-- diagnostic tools can record events without changing the producer;
-- scene-specific listeners can attach and detach with a defined lifetime.
-
-## The second boundary: one authoritative resolver
-
-Using events as a second path for combat mutation introduced a different risk. If live combat registered an effect handler while the simulator also called that effect directly, the effect could run twice. If only one path changed, live and simulated battles could disagree.
-
-I consolidated state-changing combat in `CombatResolver`. Both consumers call the same await-free rules:
-
-```text
-                    ┌─ live TurnManager ── render result, play effects
-intent ──► CombatResolver
-                    └─ BattleSimulator ─── tally result, continue headlessly
-```
-
-The resolver applies damage, statuses, combat effects, bonus hits and queued healing to the battle state, then returns a result. The live turn manager presents that result. The simulator tallies it without loading the visual scene. Dramatic effect signals still fire from inside the shared path, so interface feedback remains decoupled without changing the outcome.
-
-## Why the hybrid matters
-
-The design uses signals where several independent systems need to observe a fact. It uses direct calls where one function must own an ordered state transition. The distinction prevents “decoupled” from becoming “unclear who changed the state.”
-
-This produced several practical gains:
-
-- Live battles and simulations share one resolution path.
-- New interface or diagnostic reactions do not need combat-controller branches.
-- Effect order and state mutation have an authoritative home.
-- Headless regression tests exercise the rules used by the game.
-- Temporary listeners and queued effects have explicit cleanup points.
-
-## Working invariants
-
-- An event name describes a fact or decision point rather than hiding an unrelated state change.
-- `CombatResolver` owns authoritative combat mutation.
-- Live presentation consumes resolver output; it does not resolve the action again.
-- The simulator uses the same effect-enabled path as live combat.
-- Listener and temporary-effect lifetimes end at an explicit scene, turn or battle boundary.
-- Dispatch occurs in response to game events rather than per-frame polling.
-
-The full game source remains private. The public simulation harness and recorded experiment show one consequence of this architecture: the combat rules can be exercised outside the playable interface while retaining the same resolution path.
+The [balance experiment](METHODS.md) uses this shared combat path. The [tools chapter](https://lacrimaeaware.github.io/gojomons-portfolio/tools/) shows how individual encounters can be inspected during development.
