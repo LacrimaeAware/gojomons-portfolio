@@ -4,7 +4,7 @@ Gojomons is a creature-building roguelike autobattler I am developing in Godot. 
 
 ## Explore the visual showcase
 
-[![Open the Gojomons showcase: an illustrated book of the world, creatures, combat and development tools](media/showcase-home.webp)](https://lacrimaeaware.github.io/gojomons-portfolio/)
+[![Open the Gojomons showcase: an illustrated book of the world, creatures, combat and development tools](media/showcase-home.png)](https://lacrimaeaware.github.io/gojomons-portfolio/)
 
 **[Open the book →](https://lacrimaeaware.github.io/gojomons-portfolio/)** Game footage introduces the world and combat. The Balance and Tools chapters show how I test mechanics, inspect simulations and review changes in playable scenes.
 

@@ -7,7 +7,7 @@
 | Material | Source |
 | --- | --- |
 | Main-menu animation | Recorded from the current main-menu scene on September 11, 2026, using Godot's movie recorder; seven-second excerpt, resized to 960 × 540 at 12 fps. No menu buttons were clicked. |
-| Showcase preview | Screenshot of the public GitHub Pages homepage, September 11, 2026 |
+| Showcase preview | Screenshot of the release homepage after the desktop bookmark-layout fix, September 17, 2026 |
 | Combat experiment | September 10, 2026 game snapshot; Godot 4.5.1 stable, official build `f62fdbde1` |
 | Battle clip | Staged two-versus-two encounter recorded in Godot at 1280 × 720 and 30 fps; an 11-second excerpt with in-game audio |
 
