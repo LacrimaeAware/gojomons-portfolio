@@ -8,9 +8,9 @@ Gojomons is a creature-building roguelike autobattler I am developing in Godot. 
 
 **[Open the book →](https://lacrimaeaware.github.io/gojomons-portfolio/)** Game footage introduces the world and combat. The Balance and Tools chapters show how I test mechanics, inspect simulations and review changes in playable scenes.
 
-## Managing complexity and its consequences
+## Combat rules and testing
 
-Moves, creature abilities, held items and team relics can all react during the same fight. Those interactions make builds interesting, but they also make bugs and dominant strategies harder to spot. I use shared combat rules, automated opponents and repeatable playtests to examine what happens when the systems meet.
+Moves, creature abilities, held items and team relics can trigger during the same fight. Live play and automated tests use the same combat rules.
 
 | Development question | How I investigate it |
 | --- | --- |
@@ -18,9 +18,7 @@ Moves, creature abilities, held items and team relics can all react during the s
 | Which choices reward a stronger strategy, and which are broadly overpowered? | Compare simulated outcomes under different decision policies, then inspect species and matchup patterns. **[Balance showcase →](https://lacrimaeaware.github.io/gojomons-portfolio/balance/)** |
 | How can I check a change quickly in its actual context? | Launch specific encounters, inspect the scene and attach review notes. **[Development tools →](https://lacrimaeaware.github.io/gojomons-portfolio/tools/)** |
 
-### From balance question to a tested decision
-
-Balance should leave players with worthwhile alternatives. One example is the tradeoff between single-type and dual-type creatures: a second type adds matchup options and weaknesses, so equal base stats need not produce equally useful choices.
+### Single-type stat experiment
 
 Gojomons already gives single-type creatures a **7% stat allowance**. I tested whether that allowance needed changing: seven adjustments, the same training matchups, then a separate set of fresh matchups to check the selected setting.
 
