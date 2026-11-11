@@ -31,13 +31,13 @@ flowchart TB
 
 Teal identifies combat rules and state. Gold identifies callers, presentation and observation. Both live play and simulation use the same resolver.
 
-## Why I introduced signals
+## Event signals
 
 A central `EventDispatcher` and named `GameEvents` give systems a shared vocabulary. A producer announces an event; the UI, audio or diagnostics can respond without being imported into the producer. Campaign systems use the same approach for travel, shops and dungeon outcomes.
 
-## Why signals were only part of the solution
+## Combat effect order
 
-Combat effects also need a definite execution order. Mixing event-driven mutation with direct simulator calls could apply an effect twice, or let the two paths diverge. I consolidated damage, statuses, bonus hits and queued healing in the shared `CombatResolver`. The live turn manager presents the result; the simulator records it without loading a visual scene.
+Combat effects also need a definite execution order. Mixing event-driven mutation with direct simulator calls could apply an effect twice, or let the two paths diverge. The shared `CombatResolver` applies damage, statuses, bonus hits and queued healing. The live turn manager presents the result; the simulator records it without loading a visual scene.
 
 | Responsibility | Owner | Reason |
 | --- | --- | --- |

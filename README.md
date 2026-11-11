@@ -25,15 +25,11 @@ The group average supports keeping the allowance in this test. Species-level mat
 **[Read the experiment →](METHODS.md)** for the controls, selection procedure and uncertainty. **[Source and media notes →](PROVENANCE.md)** identify the recorded data and footage.
 
 <details>
-<summary>Reproduce the recorded analysis</summary>
+<summary>Analysis code</summary>
 
 ```sh
 python experiments/analyze_balance.py
 python -m unittest discover -s tests
 ```
 
-The included outcomes reproduce the selection, totals and interval. Running new battles requires the private game source.
-
 </details>
-
-Code, notes and prototype art were generated with AI.

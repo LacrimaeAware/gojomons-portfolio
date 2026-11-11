@@ -10,7 +10,7 @@ Creature types change which matchups and combinations are useful. Gojomons gives
 | --- | --- | --- |
 | **Retain current stats** | **49.7%** single-type battle score | **47.2–52.3%** paired-bootstrap 95% interval |
 
-Training selected 1.00×: the existing allowance remains in place. Validation used 1,024 fresh scenarios, each fought on both sides. The result supports group-level parity for this roster and ruleset; equipment and campaign builds require their own tests.
+Training selected 1.00×: the existing allowance remains in place. Validation used 1,024 fresh scenarios, each fought on both sides. The result supports group-level parity for this roster and ruleset.
 
 ## Select first, validate afterward
 
@@ -55,32 +55,15 @@ The two orientations share a matchup and seed, so they are related observations.
 | Mean battle length | 5.30 turns |
 | Conservative Hoeffding 95% interval | 45.5–54.0% |
 
-Both intervals describe matchup-and-seed sampling within this fixed roster. Individual species, alternate combat styles and player strategies can produce different patterns. The intervention measures the effect of scaling stats, rather than isolating the effect of a second type.
-
-<details>
-<summary>Reproducibility checks and statistical details</summary>
-
-Training contains 3,584 battles; validation adds 2,048, for 5,632 recorded battles.
-
-| Check | Recorded outcome |
-| --- | --- |
-| Repeat fixed seeds | 32 battles reproduced |
-| Reverse parameter order | First eight scenarios at each setting matched outcomes and turn counts, including a fresh engine process |
-| Stat scaling survives initialization | Checked at 0.80× and 1.40× |
-| Input mutation / effects pipeline | Harness checks input mutation and requires effects to be enabled |
-| Multi-target regression | 600 seeds passed, including 98 primary misses |
-
-Shared seeds couple comparisons, but changed actions can consume random draws differently. The trajectories need not share identical hit/miss events. Bootstrap intervals are approximate and pointwise. The convergence display also uses pointwise intervals, not a sequential stopping rule.
+Both intervals describe matchup-and-seed sampling within this fixed roster. The intervention scales stats while the type rules stay fixed.
 
 The stat multiplier includes current and maximum HP, Attack, Defense, Special Attack, Special Defense and Speed. It acts on effective combat stats after the existing 1.07 allowance.
 
-</details>
-
-## Reproduce the analysis
+## Analysis code
 
 ```sh
 python experiments/analyze_balance.py
 python -m unittest discover -s tests
 ```
 
-[Individual outcomes](data/battle-outcomes.json) feed the [analysis script](experiments/analyze_balance.py), which regenerates the [summary](data/balance-summary.json). The private game source is needed to run new battles. [Provenance](PROVENANCE.md) records the engine and source snapshot.
+[Individual outcomes](data/battle-outcomes.json) feed the [analysis script](experiments/analyze_balance.py), which regenerates the [summary](data/balance-summary.json). [Data and footage notes](PROVENANCE.md).
