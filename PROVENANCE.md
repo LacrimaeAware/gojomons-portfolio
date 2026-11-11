@@ -6,8 +6,8 @@
 
 | Material | Source |
 | --- | --- |
-| Main-menu animation | Recorded from the current main-menu scene on September 11, 2026, using Godot's movie recorder; seven-second excerpt, resized to 960 × 540 at 12 fps. No menu buttons were clicked. |
-| Showcase preview | Screenshot of the release homepage after the desktop bookmark-layout fix, September 17, 2026 |
+| Main-menu animation | Recorded from the current main-menu scene on September 11, 2026, using Godot's movie recorder; seven-second excerpt, resized to 960 × 540 at 12 fps. |
+| Showcase preview | Screenshot of the showcase homepage, September 17, 2026 |
 | Combat experiment | September 10, 2026 game snapshot; Godot 4.5.1 stable, official build `f62fdbde1` |
 | Battle clip | Staged two-versus-two encounter recorded in Godot at 1280 × 720 and 30 fps; an 11-second excerpt with in-game audio |
 
@@ -24,4 +24,4 @@ The battle clip illustrates combat presentation. The balance dataset contains se
 
 The experiment uses `BattleSimulator` with `apply_effects=true`, calling the shared `CombatResolver` and post-turn manager. The harness requires effect collection to be active. The full game source and asset library remain private.
 
-I develop Gojomons with AI assistance for code and prototype art. The reported balance results come from automated game simulations.
+Code, notes and prototype art were generated with AI. The reported balance results come from automated game simulations.

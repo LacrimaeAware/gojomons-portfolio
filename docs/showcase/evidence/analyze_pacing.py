@@ -80,7 +80,7 @@ def describe(rows: list[dict]) -> dict:
 
 
 def pair(base: list[dict], variant: list[dict]) -> dict:
-    """Pair the retained scenario identity; do not imply full input hashes exist."""
+    """Match scenarios by index and verify their recorded fields."""
     reference = {r["i"]: r for r in base}
     if set(reference) != {r["i"] for r in variant}:
         raise ValueError("Different case sets")

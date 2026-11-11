@@ -1,6 +1,6 @@
 [← Project](README.md) · [See the development tools](https://lacrimaeaware.github.io/gojomons-portfolio/tools/)
 
-# Many reactions. One combat result.
+# Combat resolution and event signals
 
 A hit can activate an item, a creature ability, an animation and a combat-log entry. As Gojomons grew, wiring each system directly to every other system made changes harder to follow. Automated balance testing raised a second requirement: a simulated battle must execute the same rules as a visible battle.
 

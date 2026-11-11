@@ -26,7 +26,7 @@ ax.errorbar([selected["scale"]], [selected["mean"]], yerr=[[selected["mean"]-sel
 ax.annotate(f"Holdout: {selected['mean']:.1%}", (selected["scale"], selected["mean"]), xytext=(1.17, 0.32), arrowprops={"arrowstyle": "-", "color": "#207b64"}, color="#145b49", fontsize=12)
 ax.set(xlabel="Single-type stat multiplier, relative to current game", ylabel="Single-type battle score", ylim=(0, 1), xticks=x)
 ax.yaxis.set_major_formatter(PercentFormatter(1))
-ax.set_title("A measurable response to a stat adjustment", loc="left", fontsize=19, fontweight="bold", pad=22)
+ax.set_title("Single-type matchup score by stat multiplier", loc="left", fontsize=19, fontweight="bold", pad=22)
 ax.spines[["top", "right"]].set_visible(False)
 ax.spines[["left", "bottom"]].set_color("#b5bbb5")
 ax.grid(axis="y", alpha=0.16)

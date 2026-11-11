@@ -1,18 +1,16 @@
-[![Gojomons — current main menu, recorded in Godot](media/main-menu-preview.webp?v=20260911-current)](https://lacrimaeaware.github.io/gojomons-portfolio/)
+[![Gojomons: current main menu, recorded in Godot](media/main-menu-preview.webp?v=20260911-current)](https://lacrimaeaware.github.io/gojomons-portfolio/)
 
 Gojomons is a creature-building roguelike autobattler I am developing in Godot. Build a team, choose a route, combine moves with equipment, and find out whether the plan survives the next fight.
 
 ## Explore the visual showcase
 
-[![Open the Gojomons showcase: an illustrated book of the world, creatures, combat and development tools](media/showcase-home.png)](https://lacrimaeaware.github.io/gojomons-portfolio/)
-
-**[Open the book →](https://lacrimaeaware.github.io/gojomons-portfolio/)** Game footage introduces the world and combat. The Balance and Tools chapters show how I test mechanics, inspect simulations and review changes in playable scenes.
+**[Open the book →](https://lacrimaeaware.github.io/gojomons-portfolio/)** Game footage introduces the world and combat. The Balance and Tools chapters cover mechanic tests, simulation results and reviews in playable scenes.
 
 ## Combat rules and testing
 
 Moves, creature abilities, held items and team relics can trigger during the same fight. Live play and automated tests use the same combat rules.
 
-| Development question | How I investigate it |
+| Development question | Approach |
 | --- | --- |
 | How can effects interact without firing twice or in the wrong order? | One combat resolver owns the state changes; signals let presentation and diagnostic systems respond. **[Architecture →](ARCHITECTURE.md)** |
 | Which choices reward a stronger strategy, and which are broadly overpowered? | Compare simulated outcomes under different decision policies, then inspect species and matchup patterns. **[Balance showcase →](https://lacrimaeaware.github.io/gojomons-portfolio/balance/)** |
@@ -20,16 +18,9 @@ Moves, creature abilities, held items and team relics can trigger during the sam
 
 ### Single-type stat experiment
 
-Gojomons already gives single-type creatures a **7% stat allowance**. I tested whether that allowance needed changing: seven adjustments, the same training matchups, then a separate set of fresh matchups to check the selected setting.
+Gojomons already gives single-type creatures a **7% stat allowance**. The experiment compared seven stat adjustments on the same training matchups, then checked the selected setting on fresh matchups.
 
-| Experiment | Result |
-| --- | --- |
-| Roster | 41 single-type and 61 dual-type species |
-| Selected adjustment | **Keep current stats** (1.00×, retaining the existing allowance) |
-| Fresh-matchup score | **49.7%** for single-type creatures |
-| 95% paired-bootstrap interval | **47.2–52.3%**, from 1,024 paired scenarios / 2,048 battles |
-
-The group average supports keeping the allowance in this test. Species-level matchups and equipment synergies are further questions—the [interactive balance chapter](https://lacrimaeaware.github.io/gojomons-portfolio/balance/) shows how I examine them.
+The group average supports keeping the allowance in this test. Species-level matchups and equipment synergies are further questions; the [interactive balance chapter](https://lacrimaeaware.github.io/gojomons-portfolio/balance/) shows the policy and species comparisons.
 
 **[Read the experiment →](METHODS.md)** for the controls, selection procedure and uncertainty. **[Source and media notes →](PROVENANCE.md)** identify the recorded data and footage.
 
@@ -44,3 +35,5 @@ python -m unittest discover -s tests
 The included outcomes reproduce the selection, totals and interval. Running new battles requires the private game source.
 
 </details>
+
+Code, notes and prototype art were generated with AI.
